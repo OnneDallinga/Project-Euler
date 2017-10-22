@@ -1,0 +1,34 @@
+package Euler;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class LargestPalindromeProduct {
+    public static boolean isPalindrome (long toTest) {
+        StringBuilder leftHalf = new StringBuilder();
+        StringBuilder rightHalf = new StringBuilder();
+        String stringToTest = Long.toString(toTest);
+        if (stringToTest.length() % 2 == 0) {
+            leftHalf.append(stringToTest.substring(0, stringToTest.length() / 2));
+            rightHalf.append(stringToTest.substring(stringToTest.length() / 2, stringToTest.length()));
+        }
+        else {
+            leftHalf.append(stringToTest.substring(0, stringToTest.length() / 2));
+            rightHalf.append(stringToTest.substring(stringToTest.length() / 2 + 1, stringToTest.length()));
+        }
+        return leftHalf.toString().equals(rightHalf.reverse().toString());
+    }
+
+    public static void main (String[] args) {
+        ArrayList<Long> palindromeList = new ArrayList<>();
+        for (long i = 0; i < 1000; i++) {
+            for (long j = 0; j < 1000; j++) {
+                if (isPalindrome(i*j)) {
+                    palindromeList.add(i*j);
+                }
+            }
+        }
+        Collections.sort(palindromeList);
+        System.out.println(palindromeList.get(palindromeList.size()-1));
+    }
+}
