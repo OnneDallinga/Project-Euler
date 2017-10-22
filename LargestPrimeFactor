@@ -1,0 +1,21 @@
+package Euler;
+import java.lang.Math;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class LargestPrimeFactor {
+    public static void main(String[] args) {
+        List<Long> primeList = new ArrayList<>();
+        long toTest = 600851475143L;
+        for (long i = 1; i < toTest; i+=2) {
+            if (toTest % i == 0) {
+                if (Prime.isPrime(i)) {
+                    primeList.add(i);
+                    System.out.println(i);
+                }
+            }
+        }
+        System.out.println(primeList);
+    }
+}
