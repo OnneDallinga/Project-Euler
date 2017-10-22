@@ -1,0 +1,20 @@
+package Euler;
+
+public class EvenFibonacciNumbers {
+    public static void main(String[] args) {
+        long currentFibonacciNumber = 1;
+        long lastFibonacciNumber = 0;
+        long sum = 0;
+        while (currentFibonacciNumber < 4000000) {
+            lastFibonacciNumber += currentFibonacciNumber;
+            if (lastFibonacciNumber % 2 == 0) {
+                sum += lastFibonacciNumber;
+            }
+            currentFibonacciNumber += lastFibonacciNumber;
+            if (currentFibonacciNumber % 2 == 0) {
+                sum+= currentFibonacciNumber;
+            }
+        }
+        System.out.println(sum);
+    }
+}
