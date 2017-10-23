@@ -76,12 +76,11 @@ public class PokerHands {
             private boolean hasThreeOfAKind;
             private int straight = 0;           // 5
             private boolean isStraight = false;
-            private boolean flush;              // 6
+            private boolean isFlush;            // 6
             private int fullHouse;              // 7
             private int fourOfAKind;            // 8
             private int straightFlush;          // 9
             private int value = 0;
-
             public Hand(String a, String b, String c, String d, String e) {
                 cardOne = new Card(a);
                 cardTwo = new Card(b);
@@ -99,7 +98,6 @@ public class PokerHands {
                 System.out.print(cards);
                 System.out.println(cardOne.cardValue.getValue() + " " + cardOne.suit + " | " + cardTwo.cardValue.getValue() + " " + cardTwo.suit + " | " + cardThree.cardValue.getValue() + " " + cardThree.suit + " | " + cardFour.cardValue.getValue() + " " + cardFour.suit + " | " + cardFive.cardValue.getValue() + " " + cardFive.suit);
                 while (checking) {
-
                     if ((cards.get(0).equals(cards.get(1))) && !(cards.get(0).equals(cards.get(2)))) {
                         this.hasOnePair = true;
                         this.value = 2;
@@ -119,8 +117,6 @@ public class PokerHands {
                         this.hasThreeOfAKind = true;
                         this.value = 4;
                     }
-
-
                     while (checking) {
                         if ((cards.get(1) - cards.get(0)) != 1) break;
                         if ((cards.get(2) - cards.get(1)) != 1) break;
@@ -132,14 +128,14 @@ public class PokerHands {
                         break;
                     }
                     if (cardOne.suit.equals(cardTwo.suit) && cardOne.suit.equals(cardThree.suit) && cardOne.suit.equals(cardFour.suit) && cardOne.suit.equals(cardFive.suit)) {
-                        this.flush = true;
+                        this.isFlush = true;
                         this.value = 6;
                     }
-                    if (isStraight && flush) {
-                        this.value = 9;
-                        break;
+                    if (hasTwoPair && hasThreeOfAKind) this.value = 7;
+                    if ((cards.get(0).equals(cards.get(1)) && cards.get(1).equals(cards.get(2)) && cards.get(2).equals(cards.get(3))) || (cards.get(1).equals(cards.get(2)) && cards.get(2).equals(cards.get(3)) && cards.get(3).equals(cards.get(4)))) {
+                        this.value = 8;
                     }
-
+                    if (isStraight && isFlush) this.value = 9;
                     break;
                 }
             }
@@ -158,5 +154,6 @@ public class PokerHands {
         }
         catch (MalformedURLException e) {System.out.println("Fail: " + e);}
         catch (IOException f) {System.out.println("Fail fail fail: " + f);}
+
     }
 }
