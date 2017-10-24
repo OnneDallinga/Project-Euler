@@ -67,28 +67,29 @@ public class PokerHands {
             private Card cardThree;
             private Card cardFour;
             private Card cardFive;
-            private int highCard;               // 1
-            private int pair;                   // 2
-            private boolean hasOnePair;
-            private int twoPair;                // 3
-            private boolean hasTwoPair;
-            private int threeOfAKind;           // 4
-            private boolean hasThreeOfAKind;
-            private int straight = 0;           // 5
+            private int highCard = 0;               // 1
+            private int pair = 0;                   // 2
+            private boolean hasOnePair = false;
+            private int twoPair = 0;                // 3
+            private boolean hasTwoPair = false;
+            private int threeOfAKind = 0;           // 4
+            private boolean hasThreeOfAKind = false;
+            private int straight = 0;               // 5
             private boolean isStraight = false;
-            private boolean isFlush;            // 6
-            private int fullHouse;              // 7
-            private int fourOfAKind;            // 8
-            private int straightFlush;          // 9
-            private int value = 0;
+            private boolean isFlush = false;            // 6
+            private int fullHouse = 0;              // 7
+            private int fourOfAKind = 0;            // 8
+            private int straightFlush = 0;          // 9
+            private int value = 1;
+            private boolean checking = true;
+            private ArrayList<Integer> cards = new ArrayList<>();
+
             public Hand(String a, String b, String c, String d, String e) {
                 cardOne = new Card(a);
                 cardTwo = new Card(b);
                 cardThree = new Card(c);
                 cardFour = new Card(d);
                 cardFive = new Card(e);
-                boolean checking = true;
-                ArrayList<Integer> cards = new ArrayList<>();
                 cards.add(cardOne.cardValue.getValue());
                 cards.add(cardTwo.cardValue.getValue());
                 cards.add(cardThree.cardValue.getValue());
@@ -96,51 +97,137 @@ public class PokerHands {
                 cards.add(cardFive.cardValue.getValue());
                 Collections.sort(cards);
                 System.out.print(cards);
+                calculateHandValue();
                 System.out.println(cardOne.cardValue.getValue() + " " + cardOne.suit + " | " + cardTwo.cardValue.getValue() + " " + cardTwo.suit + " | " + cardThree.cardValue.getValue() + " " + cardThree.suit + " | " + cardFour.cardValue.getValue() + " " + cardFour.suit + " | " + cardFive.cardValue.getValue() + " " + cardFive.suit);
+            }
+            private void calculateHandValue() {
                 while (checking) {
-                    if ((cards.get(0).equals(cards.get(1))) && !(cards.get(0).equals(cards.get(2)))) {
-                        this.hasOnePair = true;
-                        this.value = 2;
-                        this.pair = cards.get(0) + cards.get(1);
-                        if ((cards.get(2).equals(cards.get(3))) && !(cards.get(2).equals(cards.get(4)))) {
-                            this.hasTwoPair = true;
-                            this.value = 3;
-                            this.twoPair = cards.get(3) + cards.get(4);
-                        }
-                        // WORKING HERE
-                    }
-                    if (((Objects.equals(cards.get(0), cards.get(1))) && Objects.equals(cards.get(2), cards.get(3))) || ((Objects.equals(cards.get(0), cards.get(1))) && Objects.equals(cards.get(3), cards.get(4))) || ((Objects.equals(cards.get(1), cards.get(2))) && Objects.equals(cards.get(3), cards.get(4)))) {
-                        this.hasTwoPair = true;
-                        this.value = 3;
-                    }
-                        if ((Objects.equals(cards.get(0), cards.get(1)) && Objects.equals(cards.get(0), cards.get(2))) || (Objects.equals(cards.get(2), cards.get(3)) && Objects.equals(cards.get(2), cards.get(4)))) {
-                        this.hasThreeOfAKind = true;
-                        this.value = 4;
-                    }
                     while (checking) {
                         if ((cards.get(1) - cards.get(0)) != 1) break;
                         if ((cards.get(2) - cards.get(1)) != 1) break;
                         if ((cards.get(3) - cards.get(2)) != 1) break;
                         if ((cards.get(4) - cards.get(3)) != 1) break;
-                        this.straight = cards.get(0) + cards.get(1) +cards.get(2) +cards.get(3) +cards.get(4);
+                        this.straight = cards.get(0) + cards.get(1) + cards.get(2) + cards.get(3) + cards.get(4);
                         this.isStraight = true;
                         this.value = 5;
                         break;
+                    }
+                    if (cards.get(0) == 2 && cards.get(1) == 3 && cards.get(2) == 4 && cards.get(3) == 5 && cards.get(4) == 14) {
+                        this.isStraight = true;
+                        this.value = 5 ;
+                        this.straight = 15;
                     }
                     if (cardOne.suit.equals(cardTwo.suit) && cardOne.suit.equals(cardThree.suit) && cardOne.suit.equals(cardFour.suit) && cardOne.suit.equals(cardFive.suit)) {
                         this.isFlush = true;
                         this.value = 6;
                     }
-                    if (hasTwoPair && hasThreeOfAKind) this.value = 7;
-                    if ((cards.get(0).equals(cards.get(1)) && cards.get(1).equals(cards.get(2)) && cards.get(2).equals(cards.get(3))) || (cards.get(1).equals(cards.get(2)) && cards.get(2).equals(cards.get(3)) && cards.get(3).equals(cards.get(4)))) {
-                        this.value = 8;
+                    if (isStraight || isFlush) {
+                        if (isFlush && isStraight) this.value = 9;
+                        break;
                     }
-                    if (isStraight && isFlush) this.value = 9;
+                    if ((cards.get(0).equals(cards.get(1))) && !(cards.get(0).equals(cards.get(2)))) {
+                        this.hasOnePair = true;
+                        this.pair = cards.get(0) + cards.get(1);
+                        this.value = 2;
+                    }
+                    if ((cards.get(1).equals(cards.get(2))) && !(cards.get(1).equals(cards.get(3))) && !(cards.get(1).equals(cards.get(0)))) {
+                        this.hasOnePair = true;
+                        this.pair = cards.get(1) + cards.get(2);
+                        this.value = 2;
+                    }
+                    if ((cards.get(2).equals(cards.get(3))) && !(cards.get(2).equals(cards.get(4))) && !(cards.get(2).equals(cards.get(1)))) {
+                        if (this.hasOnePair) {
+                            this.hasTwoPair = true;
+                            this.twoPair = this.pair + cards.get(2) + cards.get(3);
+                            this.value = 3;
+                        }
+                        else {
+                            this.hasOnePair = true;
+                            this.pair = cards.get(2) + cards.get(3);
+                            this.value = 2;
+                        }
+                    }
+                    if ((cards.get(3).equals(cards.get(4))) && !(cards.get(3).equals(cards.get(2)))) {
+                        if (this.hasOnePair) {
+                            this.hasTwoPair = true;
+                            this.twoPair = this.pair + cards.get(3) + cards.get(4);
+                            this.value = 3;
+                        }
+                        else {
+                            this.hasOnePair = true;
+                            this.pair = cards.get(3) + cards.get(4);
+                            this.value = 2;
+                        }
+                    }
+                    if (((cards.get(0).equals(cards.get(1))) && (cards.get(0).equals(cards.get(2)))) && !(cards.get(0).equals(cards.get(3)))) {
+                        this.hasThreeOfAKind = true;
+                        this.threeOfAKind = cards.get(0) + cards.get(1) + cards.get(2);
+                        this.value = 4;
+                    }
+                    if ((((cards.get(1).equals(cards.get(2))) && (cards.get(1).equals(cards.get(3)))) && !(cards.get(1).equals(cards.get(4)))) && !(cards.get(1).equals(cards.get(0)))) {
+                        this.hasThreeOfAKind = true;
+                        this.threeOfAKind = cards.get(1) + cards.get(2) + cards.get(3);
+                        this.value = 4;
+                    }
+                    if (((cards.get(2).equals(cards.get(3))) && (cards.get(2).equals(cards.get(4)))) && !(cards.get(2).equals(cards.get(1)))) {
+                        this.hasThreeOfAKind = true;
+                        this.threeOfAKind = cards.get(2) + cards.get(3) + cards.get(4);
+                        this.value = 4;
+                    }
+                    if (hasOnePair && hasThreeOfAKind) {
+                        this.value = 7;
+                        this.fullHouse = this.pair + this.threeOfAKind;
+                    }
+                    if (cards.get(0).equals(cards.get(1)) && cards.get(1).equals(cards.get(2)) && cards.get(2).equals(cards.get(3))) {
+                        this.value = 8;
+                        this.fourOfAKind = cards.get(0) + cards.get(1) + cards.get(2) + cards.get(3);
+                    }
+                    if (cards.get(1).equals(cards.get(2)) && cards.get(2).equals(cards.get(3)) && cards.get(3).equals(cards.get(4))) {
+                        this.value = 8;
+                        this.fourOfAKind = cards.get(1) + cards.get(2) + cards.get(3) + cards.get(4);
+                    }
                     break;
                 }
             }
+            private boolean highCardChecker(Hand a){
+                if (this.cards.get(4) > a.cards.get(4)) return true;
+                if (this.cards.get(4) < a.cards.get(4)) return false;
+                if (this.cards.get(3) > a.cards.get(3)) return true;
+                if (this.cards.get(3) < a.cards.get(3)) return false;
+                if (this.cards.get(2) > a.cards.get(2)) return true;
+                if (this.cards.get(2) < a.cards.get(2)) return false;
+                if (this.cards.get(1) > a.cards.get(1)) return true;
+                if (this.cards.get(1) < a.cards.get(1)) return false;
+                if (this.cards.get(0) > a.cards.get(0)) return true;
+                if (this.cards.get(0) < a.cards.get(0)) return false;
+                return false;
+            }
+
             public boolean pokerWinner (Hand a) {
-                return this.value > a.value;
+                if (this.value > a.value) return true;
+                else if (this.value == a.value) {
+                    switch (this.value) {
+                        case 1: return this.highCardChecker(a);
+                        case 2:
+                            if (this.pair > a.pair) return true;
+                            if (this.pair < a.pair) return false;
+                            return this.highCardChecker(a);
+                        case 3: if (this.twoPair > a.twoPair) return true;
+                            if (this.twoPair < a.twoPair) return false;
+                            return this.highCardChecker(a);
+                        case 4: if (this.threeOfAKind > a.threeOfAKind) return true;
+                            if (this.threeOfAKind < a.threeOfAKind) return false;
+                            return this.highCardChecker(a);
+                        case 5: return (this.straight > a.straight);
+                        case 6: return this.highCardChecker(a);
+                        case 7: if (this.threeOfAKind > a.threeOfAKind) return true;
+                                if (this.threeOfAKind < a.threeOfAKind) return false;
+                                return this.highCardChecker(a);
+                        case 8: if (this.fourOfAKind > a.fourOfAKind) return true;
+                                return this.highCardChecker(a);
+                    }
+                }
+                return false;
             }
         }
         try {
@@ -149,6 +236,15 @@ public class PokerHands {
                     Hand player1 = new Hand(ourFile.next(), ourFile.next(), ourFile.next(), ourFile.next(), ourFile.next());
                     Hand player2 = new Hand(ourFile.next(), ourFile.next(), ourFile.next(), ourFile.next(), ourFile.next());
                     if (player1.pokerWinner(player2)) player1Wins++;
+                    else System.out.println("LOSS ");
+                    if (player1.hasOnePair) System.out.println("Pair: " + player1.pair + " ");
+                    if (player1.hasTwoPair) System.out.println("Two Pair: " + player1.twoPair + " ");
+                    if (player1.hasThreeOfAKind) System.out.println("Three of a Kind" + player1.threeOfAKind);
+                    if (player1.fourOfAKind != 0) System.out.println("Four of a Kind: " + player1.fourOfAKind);
+                    if (player1.isStraight) System.out.println("Straight: " + player1.straight);
+                    if (player1.isFlush) System.out.println("Flush");
+                    if (player1.fullHouse != 0) System.out.println("Full House: " + player1.fullHouse);
+                    if (player1.straightFlush != 0) System.out.println("Straight Flush: " + player1.straight);
                     System.out.println(player1Wins);
             }
         }
