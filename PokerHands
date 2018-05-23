@@ -3,8 +3,6 @@ import java.io.IOException;
 import java.util.*;
 import java.net.*;
 
-// Yes I know this file is a mess but it's been fun! (And it's my mess so who cares)
-
 enum Suit {
     CLUBS, DIAMONDS, SPADES, HEARTS
 }
